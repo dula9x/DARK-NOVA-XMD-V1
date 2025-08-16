@@ -1,106 +1,32 @@
-const { cmd, commands } = require("../command");
-const config = require('../config');
+module.exports = {
+  pattern: "menu",
+  alias: ["help", "commands"],
+  desc: "Show all commands",
+  category: "main",
 
-cmd(
-  {
-    pattern: "menu",
-    alise: ["getmenu"],
-    react: "🆗",
-    desc: "get cmd list",
-    category: "main",
-    filename: __filename,
-  },
-  async (
-    robin,
-    mek,
-    m,
-    {
-      from,
-      quoted,
-      body,
-      isCmd,
-      command,
-      args,
-      q,
-      isGroup,
-      sender,
-      senderNumber,
-      botNumber2,
-      botNumber,
-      pushname,
-      isMe,
-      isOwner,
-      groupMetadata,
-      groupName,
-      participants,
-      groupAdmins,
-      isBotAdmins,
-      isAdmins,
-      reply,
-    }
-  ) => {
+  function: async (robin, mek, m, { reply }) => {
     try {
-      let menu = {
-        main: "",
-        download: "",
-        group: "",
-        owner: "",
-        convert: "",
-        search: "",
-      };
+      const menuText = `
+*🤖 DARK-NOVA-XMD MENU 🤖*
 
-      for (let i = 0; i < commands.length; i++) {
-        if (commands[i].pattern && !commands[i].dontAddCommandList) {
-          menu[
-            commands[i].category
-          ] += `${config.PREFIX}${commands[i].pattern}\n`;
-        }
-      }
+📌 Main Commands
+- .menu / .help   → Show this menu
+- .alive          → Bot status
 
-      let madeMenu = `👋 *Hello  ${pushname}*
+📥 Downloaders
+- .fb <url>       → Facebook video downloader
 
+( Add more commands here… )
+      `;
 
-| *MAIN COMMANDS* |
-    ▫️.alive
-    ▫️.menu
-    ▫️.
-    ▫️.
-    ▫️.
-| *DOWNLOAD COMMANDS* |
-    ▫️.
-    ▫️.
-    ▫️.
-| *GROUP COMMANDS* |
-${menu.group}
-| *OWNER COMMANDS* |
-    ▫️.restart
-    ▫️.update
-| *CONVERT COMMANDS* |
-    ▫️
-    ▫️
-    ▫️
-    ▫️
-| *SEARCH COMMANDS* |
-${menu.search}
-
-
-🥶ᴅᴀʀᴋ ɴᴏᴠᴀ xᴍᴅ🥶
-
-> DARK-NOVA-XMD MENU MSG
-`;
       await robin.sendMessage(
-        from,
-        {
-          image: {
-            url: "https://github.com/dula9x/DARK-NOVA-XMD-V1-WEB-PAIR/blob/main/images/WhatsApp%20Image%202025-08-15%20at%2017.22.03_c520eb7b.jpg?raw=true",
-          },
-          caption: madeMenu,
-        },
+        mek.key.remoteJid,
+        { text: menuText },
         { quoted: mek }
       );
-    } catch (e) {
-      console.log(e);
-      reply(`${e}`);
+    } catch (err) {
+      console.error("[MENU ERROR]", err);
+      reply("❌ Error while showing menu.");
     }
-  }
-);
+  },
+};

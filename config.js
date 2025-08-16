@@ -6,10 +6,7 @@ function convertToBool(text, fault = "true") {
   return text === fault ? true : false;
 }
 module.exports = {
-  SESSION_ID: process.env.SESSION_ID || "qTBExaJL#xwhnLEeDL9wxmnnjRfOBieCNywKUCb-jc9WwYObxDkE",
+  SESSION_ID: process.env.SESSION_ID || "7CJwBDyQ#y0avic_VElgTpQI-tWcdlp6ZYOu6PhJjKMWeSijK2-I",
+  MONGODB: process.env.MONGODB || "mongodb://mongo:pzpFHALBVOXYCqDKIKorAcqvlJBabaOH@crossover.proxy.rlwy.net:26835",
   OWNER_NUM: process.env.OWNER_NUM || "94752978237 / 94770349867",
-  PREFIX: process.env.PREFIX ||"."
-  ALIVE_MSG:process.env.ALIVE_MSG || "Iam Alive Now!! ᴅᴀʀᴋ ɴᴏᴠᴀ xᴍᴅ 🤭💗 ආහ් පැටියෝ කොහොමද ?🌝!\n\n🥶𝐌𝐚𝐝𝐞 𝐛𝐲 alpha x team🥶",
-  AUTO_READ_STATUS: process.env.AUTO_READ_STATUS || "thrue",
-  MODE: process.env.MODE || "public",
 };

@@ -1,108 +1,40 @@
-const { cmd, commands } = require("../command");
-const getFbVideoInfo = require("fb-downloader-scrapper");
+const axios = require("axios");
 
-cmd(
-  {
-    pattern: "fb",
-    alias: ["facebook"],
-    react: "💀",
-    desc: "Download Facebook Video",
-    category: "download",
-    filename: __filename,
-  },
-  async (
-    robin,
-    mek,
-    m,
-    {
-      from,
-      quoted,
-      body,
-      isCmd,
-      command,
-      args,
-      q,
-      isGroup,
-      sender,
-      senderNumber,
-      botNumber2,
-      botNumber,
-      pushname,
-      isMe,
-      isOwner,
-      groupMetadata,
-      groupName,
-      participants,
-      groupAdmins,
-      isBotAdmins,
-      isAdmins,
-      reply,
-    }
-  ) => {
+module.exports = {
+  pattern: "fb",
+  alias: ["facebook", "fbdown"],
+  desc: "Download facebook videos",
+  category: "downloader",
+  use: ".fb <url>",
+
+  function: async (robin, mek, m, { args, reply }) => {
     try {
-      if (!q) return reply("*Please provide a valid Facebook video URL!* 🌚❤️");
+      if (!args[0]) return reply("❌ Please provide a Facebook video link.");
 
-      // Validate the Facebook URL format
-      const fbRegex = /(https?:\/\/)?(www\.)?(facebook|fb)\.com\/.+/;
-      if (!fbRegex.test(q))
-        return reply("*Invalid Facebook URL! Please check and try again.* 🌚");
+      let url = args[0];
+      reply("⬇️ Downloading Facebook video... Please wait");
 
-      // Fetch video details
-      reply("*Downloading your video...* 🌚❤️");
+      const res = await axios.get(
+        `https://api.akuari.my.id/downloader/fb?link=${url}`
+      );
 
-      const result = await getFbVideoInfo(q);
-
-      if (!result || (!result.sd && !result.hd)) {
-        return reply("*Failed to download video. Please try again later.* 🌚");
+      if (!res.data || !res.data.respon) {
+        return reply("⚠️ Failed to fetch video. Invalid link or API error.");
       }
 
-      const { title, sd, hd } = result;
+      const videoUrl = res.data.respon[0].url;
 
-      // Prepare and send the message with video details
-      let desc = `
-*❤️ DARK-NOVA-XMD FB VIDEO DOWNLOADER ❤️*
-
-👻 *Title*: ${title || "Unknown"}
-👻 *Quality*: ${hd ? "HD Available" : "SD Only"}
-
-𝐌𝐚𝐝𝐞 𝐛𝐲 ALPHA X TEAM
-        `;
       await robin.sendMessage(
-        from,
+        mek.key.remoteJid,
         {
-          image: {
-            url: "https://github.com/dula9x/DARK-NOVA-XMD-V1-WEB-PAIR/blob/main/images/%E1%B4%85%E1%B4%80%CA%80%E1%B4%8B%20%C9%B4%E1%B4%8F%E1%B4%A0%E1%B4%80%20x%E1%B4%8D%E1%B4%85.png?raw=true",
-          },
-          caption: desc,
+          video: { url: videoUrl },
+          caption: "✅ Here is your Facebook video",
         },
         { quoted: mek }
       );
-      // Send the video if available
-      if (hd) {
-        await robin.sendMessage(
-          from,
-          { video: { url: hd }, caption: "----------HD VIDEO----------" },
-          { quoted: mek }
-        );
-        await robin.sendMessage(
-          from,
-          { video: { url: sd }, caption: "----------SD VIDEO----------" },
-          { quoted: mek }
-        );
-      } else if (sd) {
-        await robin.sendMessage(
-          from,
-          { video: { url: sd }, caption: "----------SD VIDEO----------" },
-          { quoted: mek }
-        );
-      } else {
-        return reply("*No downloadable video found!* 🌚");
-      }
-
-      return reply("*Thanks for using ᴅᴀʀᴋ ɴᴏᴠᴀ xᴍᴅ bot* 🌚❤️");
-    } catch (e) {
-      console.error(e);
-      reply(`*Error:* ${e.message || e}`);
+    } catch (err) {
+      console.error("[FB-DOWN ERROR]", err);
+      reply("❌ Error while downloading Facebook video.");
     }
-  }
-);
+  },
+};
