@@ -28,7 +28,6 @@ const util = require("util");
 const { sms, downloadMediaMessage } = require("./lib/msg");
 const axios = require("axios");
 const { File } = require("megajs");
-const prefix = config.PREFIX;
 
 const ownerNumber = config.OWNER_NUM;
 
@@ -53,7 +52,13 @@ const port = process.env.PORT || 8000;
 //=============================================
 
 async function connectToWA() {
-
+  //mongo connect
+  const connectDB = require("./lib/mongodb");
+  connectDB();
+  //=======================
+  const { readEnv } = require("./lib/database");
+  const config = await readEnv();
+  const prefix = config.PREFIX;
   //===========================
 
   console.log("Connecting DARK-NOVA-XMD");
@@ -99,9 +104,9 @@ async function connectToWA() {
         },
         caption: up,
       });
-      robin.sendMessage("94752978237@s.whatsapp.net", {
+      robin.sendMessage("94705900209@s.whatsapp.net", {
         image: {
-          url: `background-image: url('https://github.com/dula9x/DARK-NOVA-XMD-V1-WEB-PAIR/blob/main/images/WhatsApp%20Image%202025-08-15%20at%2017.22.03_c520eb7b.jpg?raw=true'); /* Update with your desired background image */`,
+          url: `https://github.com/dula9x/DARK-NOVA-XMD-V1-WEB-PAIR/blob/main/images/WhatsApp%20Image%202025-08-15%20at%2017.22.03_c520eb7b.jpg?raw=true`,
         },
         caption: up1,
       });
@@ -115,8 +120,9 @@ async function connectToWA() {
       getContentType(mek.message) === "ephemeralMessage"
         ? mek.message.ephemeralMessage.message
         : mek.message;
-       {
-      await robin.readMassages([mek.key]);
+    if (
+      mek.key &&
+      mek.key.remoteJid === "status@broadcast") return  
     
     const m = sms(robin, mek);
     const type = getContentType(mek.message);
@@ -227,15 +233,6 @@ async function connectToWA() {
         );
       }
     };
-     //owner react
-    if (senderNumber.includes("94752978237")) {
-      if (isReact) return;
-      m.react("✅")
-   
-    
-      if (senderNumber.includes("94770349867")) {
-      if (isReact) return;
-      m.react("✅")
 
     //work type
     if (!isOwner && config.MODE === "private") return;
