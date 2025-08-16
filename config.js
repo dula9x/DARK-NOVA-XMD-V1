@@ -6,7 +6,7 @@ function convertToBool(text, fault = "true") {
   return text === fault ? true : false;
 }
 module.exports = {
-  SESSION_ID: process.env.SESSION_ID || "uS5EGQ6R#ej_vIiKLq4hyBsH2ELVMo2Elq3X2xZmknkHqzB2eAl8",
+  SESSION_ID: process.env.SESSION_ID || "qTBExaJL#xwhnLEeDL9wxmnnjRfOBieCNywKUCb-jc9WwYObxDkE",
   OWNER_NUM: process.env.OWNER_NUM || "94752978237 / 94770349867",
   PREFIX: process.env.PREFIX ||"."
   ALIVE_IMG:process.env.ALIVE_IMG || "https://github.com/dula9x/DARK-NOVA-XMD-V1-WEB-PAIR/blob/main/images/WhatsApp%20Image%202025-08-15%20at%2017.22.03_c520eb7b.jpg?raw=true",
